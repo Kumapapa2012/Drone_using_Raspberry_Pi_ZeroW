@@ -40,10 +40,7 @@ function updateStatus() {
   
       if(strControllerPrev != strController)
       {
-        if(wsAcked == true) wsconn.send(strController);
-        // else discard...
-        wsAcked = false;
-        
+        wsconn.send(strController);        
         strControllerPrev = strController;
       }
       var d = document.getElementById("testDiv");

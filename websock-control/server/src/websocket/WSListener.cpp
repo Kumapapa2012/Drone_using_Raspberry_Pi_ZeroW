@@ -30,7 +30,7 @@ void WSListener::readMessage(const WebSocket& socket, v_word8 opcode, p_char8 da
     m_messageBuffer.clear();
     sbus_service.sbusWrite(wholeMessage->std_str());
 
-    return socket.sendOneFrameText( "Hello from oatpp!: ");
+    return socket.sendOneFrameText( "Hello from oatpp!: "+wholeMessage->std_str());
 
   } else if (size > 0) { // message frame received
     m_messageBuffer.write(data, size);
