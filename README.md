@@ -5,9 +5,9 @@ TBD
 ## Oatpp and Oatpp - WebSocket  
 https://github.com/oatpp/oatpp
 https://github.com/oatpp/oatpp-websocket  
-You shold test to see if you can build and run some Websock examples from  
+**You must test to see if you can build and run some Websock examples from  
 https://github.com/oatpp/example-websocket   
-...**on your Raspberry Pi Zero.** Then proceed to next.
+...on your Raspberry Pi Zero.** Then proceed to next.
 
 # Configuring Cross Compile Environments
 s of 2020/02/23, you can't use official toolchain for Raspberry Pi Zero w/ Buster due to this issue.   
