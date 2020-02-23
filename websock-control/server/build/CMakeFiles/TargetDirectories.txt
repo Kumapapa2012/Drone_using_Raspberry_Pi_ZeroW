@@ -1,0 +1,3 @@
+/home/kmori/__raspberry_zero/websock-control2/server/build/CMakeFiles/rebuild_cache.dir
+/home/kmori/__raspberry_zero/websock-control2/server/build/CMakeFiles/websock-sbus-server-exe.dir
+/home/kmori/__raspberry_zero/websock-control2/server/build/CMakeFiles/edit_cache.dir
