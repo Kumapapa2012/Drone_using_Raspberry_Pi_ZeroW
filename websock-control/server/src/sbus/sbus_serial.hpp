@@ -20,6 +20,7 @@ class Sbus_Serial {
 
   // Currently Write only
   int update(unsigned char*);
+  
 
  private:
   int _fd;
