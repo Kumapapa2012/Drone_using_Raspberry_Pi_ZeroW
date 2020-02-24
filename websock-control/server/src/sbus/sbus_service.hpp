@@ -1,13 +1,11 @@
 #ifndef _SBUS_CONTROLLER
 #define _SBUS_CONTROLLER
 
-#include "SBUS.h"
-#include "defaults.h"
-//#include <chrono>
-#include <regex>
+#include "sbus_serial.hpp"
 
+#include "defaults.h"
+#include <regex>
 #include "oatpp/core/async/Executor.hpp"
-//#include "oatpp/core/async/Coroutine.hpp"
 
 namespace SBUS_CONTROLLER {
 class Sbus_Service {
@@ -23,8 +21,8 @@ public:
   void sbusUpdate();
 private:
   // singleton instance
+  SBUS_CONTROLLER::Sbus_Serial *_sbus_serial = nullptr;
 
-  SBUS::SBUS *_sbus = NULL;
   bool _setup = false;
   std::string _strBuf;
   //struct ::timespec ts_prev;

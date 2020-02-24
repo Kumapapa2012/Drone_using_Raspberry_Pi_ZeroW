@@ -11,26 +11,27 @@ public:
     Sbus_Serial(Sbus_Serial &&) = delete;
     Sbus_Serial &operator=(Sbus_Serial &&) = delete;
 
-    static Sbus_Serial *GetInstance()
+    static Sbus_Serial *getInstance()
     {
         static Sbus_Serial instance;
         return &instance;
     }
 
+
     int start(std::string dev_path);  // Initialization and begin()
     int stop();
 
     // Currently Write only
-    int update(unsigned char *);
+    int write(std::string strIn);
+    int update();
 
 private:
     int _fd = 0;
     const uint32_t _sbusBaud = 100000;
-    int _connect(u_char *dev_path);
-    Sbus_Serial();
-    ~Sbus_Serial()
-    {
-        stop();
-    };
+    unsigned char _sbusPacket[25];
+    std::string _s_sbusPacket; // dummy for testing.
+    int _connect(std::string dev_path);
+    Sbus_Serial() = default;
+    ~Sbus_Serial() = default;
 };
 }  // namespace SBUS_CONTROLLER

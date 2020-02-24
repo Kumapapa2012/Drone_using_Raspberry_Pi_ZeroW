@@ -83,18 +83,18 @@ CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.s"
 	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/App.cpp -o CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.s
 
-CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o: CMakeFiles/websock-sbus-server-exe.dir/flags.make
-CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o: ../src/sbus/sbus_controller.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o"
-	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o -c /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_controller.cpp
+CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o: CMakeFiles/websock-sbus-server-exe.dir/flags.make
+CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o: ../src/sbus/sbus_service.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o"
+	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o -c /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_service.cpp
 
-CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.i"
-	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_controller.cpp > CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.i
+CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.i"
+	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_service.cpp > CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.i
 
-CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.s"
-	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_controller.cpp -o CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.s
+CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.s"
+	/opt/cross-pi-gcc/bin/arm-linux-gnueabihf-g++ --sysroot=/home/kmori/__raspberry_zero/__crosscompile/rootfs $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_service.cpp -o CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.s
 
 CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.o: CMakeFiles/websock-sbus-server-exe.dir/flags.make
 CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.o: ../src/sbus/sbus_serial.cpp
@@ -113,7 +113,7 @@ CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.s: cmake_force
 websock__sbus__server__exe_OBJECTS = \
 "CMakeFiles/websock-sbus-server-exe.dir/src/websocket/WSListener.cpp.o" \
 "CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.o" \
-"CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o" \
+"CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o" \
 "CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.o"
 
 # External object files for target websock-sbus-server-exe
@@ -121,12 +121,11 @@ websock__sbus__server__exe_EXTERNAL_OBJECTS =
 
 websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/src/websocket/WSListener.cpp.o
 websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.o
-websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o
+websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o
 websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.o
 websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/build.make
 websock-sbus-server-exe: /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/lib/oatpp-0.19.11/liboatpp.a
 websock-sbus-server-exe: /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/lib/oatpp-0.19.11/liboatpp-websocket.a
-websock-sbus-server-exe: /home/kmori/__raspberry_zero/PiSBUS/libsbus.a
 websock-sbus-server-exe: /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/lib/oatpp-0.19.11/liboatpp-test.a
 websock-sbus-server-exe: /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/lib/oatpp-0.19.11/liboatpp.a
 websock-sbus-server-exe: CMakeFiles/websock-sbus-server-exe.dir/link.txt

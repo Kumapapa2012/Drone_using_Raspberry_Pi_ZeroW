@@ -6,5 +6,5 @@ CXX_FLAGS = -march=armv6 -mfpu=vfp -mfloat-abi=hard -I/home/kmori/__raspberry_ze
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src, -I/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/../../../../PiSBUS/src -isystem /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/include/oatpp-0.19.11/oatpp -isystem /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/include/oatpp-0.19.11/oatpp-websocket 
+CXX_INCLUDES = -isystem /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/include/oatpp-0.19.11/oatpp -isystem /home/kmori/__raspberry_zero/__crosscompile/rootfs/usr/local/include/oatpp-0.19.11/oatpp-websocket 
 

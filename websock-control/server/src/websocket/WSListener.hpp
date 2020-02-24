@@ -3,7 +3,7 @@
 
 #include "oatpp-websocket/ConnectionHandler.hpp"
 #include "oatpp-websocket/WebSocket.hpp"
-#include "../sbus/sbus_controller.hpp"
+#include "../sbus/sbus_service.hpp"
 
 /**
  * WebSocket listener listens on incoming WebSocket events.

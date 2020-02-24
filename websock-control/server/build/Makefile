@@ -150,33 +150,6 @@ src/App.cpp.s:
 	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/App.cpp.s
 .PHONY : src/App.cpp.s
 
-src/sbus/sbus_controller.o: src/sbus/sbus_controller.cpp.o
-
-.PHONY : src/sbus/sbus_controller.o
-
-# target to build an object file
-src/sbus/sbus_controller.cpp.o:
-	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.o
-.PHONY : src/sbus/sbus_controller.cpp.o
-
-src/sbus/sbus_controller.i: src/sbus/sbus_controller.cpp.i
-
-.PHONY : src/sbus/sbus_controller.i
-
-# target to preprocess a source file
-src/sbus/sbus_controller.cpp.i:
-	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.i
-.PHONY : src/sbus/sbus_controller.cpp.i
-
-src/sbus/sbus_controller.s: src/sbus/sbus_controller.cpp.s
-
-.PHONY : src/sbus/sbus_controller.s
-
-# target to generate assembly for a file
-src/sbus/sbus_controller.cpp.s:
-	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_controller.cpp.s
-.PHONY : src/sbus/sbus_controller.cpp.s
-
 src/sbus/sbus_serial.o: src/sbus/sbus_serial.cpp.o
 
 .PHONY : src/sbus/sbus_serial.o
@@ -203,6 +176,33 @@ src/sbus/sbus_serial.s: src/sbus/sbus_serial.cpp.s
 src/sbus/sbus_serial.cpp.s:
 	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_serial.cpp.s
 .PHONY : src/sbus/sbus_serial.cpp.s
+
+src/sbus/sbus_service.o: src/sbus/sbus_service.cpp.o
+
+.PHONY : src/sbus/sbus_service.o
+
+# target to build an object file
+src/sbus/sbus_service.cpp.o:
+	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.o
+.PHONY : src/sbus/sbus_service.cpp.o
+
+src/sbus/sbus_service.i: src/sbus/sbus_service.cpp.i
+
+.PHONY : src/sbus/sbus_service.i
+
+# target to preprocess a source file
+src/sbus/sbus_service.cpp.i:
+	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.i
+.PHONY : src/sbus/sbus_service.cpp.i
+
+src/sbus/sbus_service.s: src/sbus/sbus_service.cpp.s
+
+.PHONY : src/sbus/sbus_service.s
+
+# target to generate assembly for a file
+src/sbus/sbus_service.cpp.s:
+	$(MAKE) -f CMakeFiles/websock-sbus-server-exe.dir/build.make CMakeFiles/websock-sbus-server-exe.dir/src/sbus/sbus_service.cpp.s
+.PHONY : src/sbus/sbus_service.cpp.s
 
 src/websocket/WSListener.o: src/websocket/WSListener.cpp.o
 
@@ -243,12 +243,12 @@ help:
 	@echo "... src/App.o"
 	@echo "... src/App.i"
 	@echo "... src/App.s"
-	@echo "... src/sbus/sbus_controller.o"
-	@echo "... src/sbus/sbus_controller.i"
-	@echo "... src/sbus/sbus_controller.s"
 	@echo "... src/sbus/sbus_serial.o"
 	@echo "... src/sbus/sbus_serial.i"
 	@echo "... src/sbus/sbus_serial.s"
+	@echo "... src/sbus/sbus_service.o"
+	@echo "... src/sbus/sbus_service.i"
+	@echo "... src/sbus/sbus_service.s"
 	@echo "... src/websocket/WSListener.o"
 	@echo "... src/websocket/WSListener.i"
 	@echo "... src/websocket/WSListener.s"

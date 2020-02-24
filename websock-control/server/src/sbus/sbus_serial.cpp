@@ -11,8 +11,18 @@
 #include <cstring>
 #include <iostream>
 
+// this is for testing. Remove it.
+#include <time.h>
+
 int SBUS_CONTROLLER::Sbus_Serial::start(std::string dev_path)
 {
+    if (_connect(dev_path.c_str()) == -1)
+    {
+        return -1;
+    }
+    // start coroutine
+
+    return 0;
 }
 
 int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
@@ -59,8 +69,23 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
     }
     return 0;
 }
-
-int SBUS_CONTROLLER::Sbus_Serial::update(unsigned char *)
+int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
 {
+    _s_sbusPacket=strIn;
+    //"frm%08X%08X%08X%08X%02X-"
+    // 4 axes - 1 button.
+
     return 0;
+}
+
+int SBUS_CONTROLLER::Sbus_Serial::update()
+{
+    time_t tt;
+    time(&tt);
+
+    std::cout << "TEST: " << std::dec << tt << _s_sbusPacket << "\r" << std::flush;
+    
+
+
+    return 0; 
 }
