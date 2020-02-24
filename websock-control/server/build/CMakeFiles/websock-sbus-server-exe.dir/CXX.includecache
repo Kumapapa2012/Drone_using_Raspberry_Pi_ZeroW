@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_serial.cpp
+sbus_serial.hpp
+/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_serial.hpp
+cstring
+-
+unistd.h
+-
+fcntl.h
+-
+errno.h
+-
+inttypes.h
+-
+asm/ioctls.h
+-
+asm/termbits.h
+-
+sys/ioctl.h
+-
+iostream
+-
+
+/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/src/sbus/sbus_serial.hpp
+iostream
+-
+
