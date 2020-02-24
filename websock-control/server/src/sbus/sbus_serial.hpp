@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 namespace SBUS_CONTROLLER
 {
 class Sbus_Serial
@@ -18,7 +17,7 @@ public:
         return &instance;
     }
 
-    int start(std::string dev_path); // Initialization and begin()
+    int start(std::string dev_path);  // Initialization and begin()
     int stop();
 
     // Currently Write only
@@ -34,4 +33,4 @@ private:
         stop();
     };
 };
-} // namespace SBUS_CONTROLLER
+}  // namespace SBUS_CONTROLLER

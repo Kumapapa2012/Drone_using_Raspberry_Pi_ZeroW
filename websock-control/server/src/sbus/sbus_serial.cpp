@@ -2,17 +2,17 @@
 
 #include <asm/ioctls.h>
 #include <asm/termbits.h>
-#include <cstring>
-#include <errno.h> // Error number definitions
-#include <fcntl.h> // File control definitions
+#include <errno.h>  // Error number definitions
+#include <fcntl.h>  // File control definitions
 #include <inttypes.h>
-#include <iostream>
 #include <sys/ioctl.h>
-#include <unistd.h> // UNIX standard function definitions
+#include <unistd.h>  // UNIX standard function definitions
+
+#include <cstring>
+#include <iostream>
 
 int SBUS_CONTROLLER::Sbus_Serial::start(std::string dev_path)
 {
-  
 }
 
 int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
@@ -46,8 +46,8 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
 
     tio.c_cflag &= ~CBAUD;
     tio.c_cflag |= BOTHER;
-    tio.c_cflag |= CSTOPB; // 2 stop bits
-    tio.c_cflag |= PARENB; // enable parity bit, even by default
+    tio.c_cflag |= CSTOPB;  // 2 stop bits
+    tio.c_cflag |= PARENB;  // enable parity bit, even by default
     tio.c_ispeed = tio.c_ospeed = _sbusBaud;
 
     r = ioctl(_fd, TCSETS2, &tio);
