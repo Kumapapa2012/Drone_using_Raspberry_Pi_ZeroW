@@ -1,3 +1,0 @@
-/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/build/CMakeFiles/rebuild_cache.dir
-/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/build/CMakeFiles/websock-sbus-server-exe.dir
-/home/kmori/__raspberry_zero/Drone_git/Drone_using_Raspberry_Pi_ZeroW/websock-control/server/build/CMakeFiles/edit_cache.dir
