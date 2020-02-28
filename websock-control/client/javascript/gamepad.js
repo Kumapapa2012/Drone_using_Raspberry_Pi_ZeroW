@@ -36,7 +36,7 @@ function updateStatus() {
     for (j in controllers) {
       var controller = controllers[j];
       //format must be ="frm%08X%08X%08X%08X%02X-";
-      var strController = buildStringToSend(controller);
+      var strController = buildStringToSendAllControls(controller);
   
       if(strControllerPrev != strController)
       {
@@ -69,25 +69,27 @@ function buildStringToSend(controller) {
   return strController;
 }
 
-function buildStringAllControls(controller) {
+function buildStringToSendAllControls(controller) {
+  var i,n;
   var strController = "all";
   strController += "-";
   strController += ("00" + controller.axes.length.toString(16).toUpperCase()).slice(-2);
+    
+  // sbus - each values has 11 bit length = 0-0x800
+  for (i = 0; i < controller.axes.length; i++) {
+    // axes has -1 to +1 -> add 1 -> 0 to 2
+  n = Math.round((controller.axes[i] + 1) * 0x400);
+    console.debug("v="+(controller.axes[i]+1) )
+    strController += ("000" + n.toString(16).toUpperCase()).slice(-3);
+  }
   strController += "-";
   strController += ("00" + controller.buttons.length.toString(16).toUpperCase()).slice(-2);
+  for (i = 0; i < controller.buttons.length; i++) {
+    // button.values has 0 to 1
+    n = Math.round(controller.buttons[i].value * 0x800);
+    strController += ("000" + n.toString(16).toUpperCase()).slice(-3);
+  }
   strController += "-";
-    
-  for (var i = 0; i < controller.axes.length; i++) {
-    var n = controller.axes[i] * 32767;
-    n = n >>> 0; // to make the number uint32
-    strController += ("00000000" + n.toString(16).toUpperCase()).slice(-8);
-  }
-  strController += "\n";
-  for (var i = 0; i < controller.buttons.length; i++) {
-    //strController += ("00" + i).slice(-2) + ":";
-    strController += ("00" + controller.buttons[i].value).slice(-2);
-  }
-  strController += "-"; // fixed to 'A' for now
   return strController;
 }
 
