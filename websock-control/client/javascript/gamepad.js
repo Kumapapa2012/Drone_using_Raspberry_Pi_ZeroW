@@ -77,16 +77,17 @@ function buildStringToSendAllControls(controller) {
     
   // sbus - each values has 11 bit length = 0-0x800
   for (i = 0; i < controller.axes.length; i++) {
-    // axes has -1 to +1 -> add 1 -> 0 to 2
-  n = Math.round((controller.axes[i] + 1) * 0x400);
-    console.debug("v="+(controller.axes[i]+1) )
+  // axes has -1 to +1 -> add 1 -> 0 to 2
+  // Then divide by 2.0 -> 0 to 1.0
+  n = Math.round((controller.axes[i] + 1) / 2.0 * 0xfff);
+    // console.debug("v="+(controller.axes[i]+1) )
     strController += ("000" + n.toString(16).toUpperCase()).slice(-3);
   }
   strController += "-";
   strController += ("00" + controller.buttons.length.toString(16).toUpperCase()).slice(-2);
   for (i = 0; i < controller.buttons.length; i++) {
-    // button.values has 0 to 1
-    n = Math.round(controller.buttons[i].value * 0x800);
+    // button.values are 0 to 1. Basically on/off. Some are promotional.
+    n = Math.round(controller.buttons[i].value * 0xfff);
     strController += ("000" + n.toString(16).toUpperCase()).slice(-3);
   }
   strController += "-";

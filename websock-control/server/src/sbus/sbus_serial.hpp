@@ -28,6 +28,12 @@ public:
 private:
     int _fd = 0;
     const uint32_t _sbusBaud = 100000;
+    uint16_t _ep_min_default = 172;  // FrSky default
+    uint16_t _ep_max_default = 1811; // FrSky default
+    uint16_t _ep_min = 193;  // My value
+    uint16_t _ep_max = 1793; // My value
+    uint16_t _channel[16];
+    std::string _prev[4];
     unsigned char _sbusPacket[25];
     std::string _s_sbusPacket; // dummy for testing.
     int _connect(std::string dev_path);

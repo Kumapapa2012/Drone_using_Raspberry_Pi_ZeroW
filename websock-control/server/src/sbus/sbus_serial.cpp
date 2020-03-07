@@ -1,23 +1,24 @@
 #include "sbus_serial.hpp"
 
-#include <asm/ioctls.h>
-#include <asm/termbits.h>
-#include <errno.h>  // Error number definitions
-#include <fcntl.h>  // File control definitions
-#include <inttypes.h>
-#include <sys/ioctl.h>
-#include <unistd.h>  // UNIX standard function definitions
+#include <errno.h>
+#include <unistd.h>
 
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
 
-// this is for testing. Remove it.
+// Serial Connection
+#include <asm/ioctls.h>
+#include <asm/termbits.h>
+#include <fcntl.h>
+#include <inttypes.h>
+#include <sys/ioctl.h>
+
+// this is for testing.
 #include <time.h>
-// sscanf
-//#include <stdio.h>
 
 int SBUS_CONTROLLER::Sbus_Serial::start(std::string dev_path)
 {
@@ -25,8 +26,11 @@ int SBUS_CONTROLLER::Sbus_Serial::start(std::string dev_path)
     {
         return -1;
     }
-    // start coroutine
-
+    // for toggles
+    for (int i = 0; i < 4; i++)
+    {
+        _prev[i] = "000";
+    }
     return 0;
 }
 
@@ -37,9 +41,8 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
         std::cerr << "Error : Stop first" << std::endl;
         return -1;
     }
-    // Setup Serial Connection
-    //
-    // open file descriptor
+    // Serial Connection Setup
+    // open serial device
     _fd = open(dev_path.c_str(), O_RDWR | O_NOCTTY);
     if (_fd < 0)
     {
@@ -49,7 +52,7 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
         return -1;
     }
 
-    // set custom baudrate
+    // set up the device
     struct termios2 tio;
     int r = ioctl(_fd, TCGETS2, &tio);
     if (r)
@@ -74,80 +77,126 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
     }
     return 0;
 }
+
 int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
 {
     int numAxes = 0;
     int numButtons = 0;
-    // these are for axis mapping.
+    // for axes mapping.
     // must be 0 to 3.
-    int idxRoll = 0;      // [A]
-    int idxPitch = 1;     // [E]
-    int idxThrottle = 2;  // [T]
-    int idxYaw = 3;       // [R]
-
-    uint16_t axes[4];
-    uint16_t buttons[12];
+    // This Mapping is Mode 2.
+    int idxRoll = 2;      // [A]
+    int idxPitch = 3;     // [E]
+    int idxThrottle = 1;  // [T]
+    int idxYaw = 0;       // [R]
 
     // for debugging...
     _s_sbusPacket = strIn;
 
-    //"all-044044003FC424-11000000000000000000000000000000000000000000000000000-"
+    // check the format.
+    // if wrong, print error and return.
+    std::regex re("all-([0-9A-F]{2}([0-9A-F]{3})+-){2}");
+    if (strIn.length() == 0 || !std::regex_match(strIn.c_str(), re))
+    {
+        std::cout << "Invalid String! : " << strIn;
+        return -1;
+    }
+
+    // Now packet format correctness is guaranteed.
+    // Start Parsing
+
     // take # of axes. must be >4. if >=4 take first 4 else fail.
     numAxes = std::stoi(strIn.substr(4, 2));
     if (numAxes < 4)
+    {
+        std::cout << "Too few axes: " << numAxes;
         return -1;
+    }
 
-    // let's build an SBUS packet for flight controller.
-    // Byte[0]: SBUS Header, 0x0F
-    _sbusPacket[0] = 0x0F;
-    // Byte[1-22]: 16 servo channels, 11 bits per servo channel
+    // lambda function to calc channel value
+    // apply default to all channels for now.
+    auto calcRawValue = [this](std::string strControllerVal, bool reverse) {
+        uint16_t rawChannelVal = std::stoi(strControllerVal, nullptr, 16);
+        if (reverse)
+        {
+            rawChannelVal = 0xfff - rawChannelVal;
+        }
+        float normalizedVal = (float)rawChannelVal / 0xfff;
+        return _ep_min + (uint16_t)((_ep_max - _ep_min) * normalizedVal);
+    };
+
     // axes - use 4 uint16_t each holds 11 bit (AETR)
-    axes[0] = std::stoi(strIn.substr(6 + (idxRoll * 3), 3), nullptr, 16) + 1000;
-    axes[1] = std::stoi(strIn.substr(6 + (idxPitch * 3), 3), nullptr, 16) + 1000;
-    axes[2] = std::stoi(strIn.substr(6 + (idxThrottle * 3), 3), nullptr, 16) + 1000;
-    axes[3] = std::stoi(strIn.substr(6 + (idxYaw * 3), 3), nullptr, 16) + 1000;
+    _channel[0] = calcRawValue(strIn.substr(6 + (idxRoll * 3), 3), false);
+    _channel[1] = calcRawValue(strIn.substr(6 + (idxPitch * 3), 3), true);
+    _channel[2] = calcRawValue(strIn.substr(6 + (idxThrottle * 3), 3), true);
+    _channel[3] = calcRawValue(strIn.substr(6 + (idxYaw * 3), 3), false);
 
-    // 11111111111 11111111111 11111111111 11111111111
-    // 12345678|9ab 12345|6789ab 12|3456789a|b 1234567|89ab
-    // ba987654|321 ba987|654321 ba|98765432|1 ba98765|4321
-
-    _sbusPacket[1] = (uint8_t)(axes[0] & 0xff);
-    _sbusPacket[2] = (uint8_t)(axes[0] >> 8 | (axes[1] & 0x1F) << 3);
-    _sbusPacket[3] = (uint8_t)(axes[1] >> 5 | axes[2] & 0x3 << 6);
-    _sbusPacket[4] = (uint8_t)((axes[2] >> 2) * 0xff);
-    _sbusPacket[5] = (uint8_t)(axes[2] >> 10 | (axes[3] & 0x7f) << 1);
-    _sbusPacket[6] = (uint8_t)(axes[3] >> 7);
-
-    // now find the start point of buttons
+    // now find the start position of buttons
     int button_start = strIn.find('-', 5) + 1;
 
     // get numbottons. only 12 buttons are supported since using 4 channels already(axes)
     numButtons = std::max(12, std::stoi(strIn.substr(button_start, 2)));
 
     button_start += 2;
-    for (int i = 0; i < numButtons; i++)
+    for (int i = 0; i < 12; i++)
     {
-        buttons[i] = std::stoi(strIn.substr(button_start + (3 * i), 3), nullptr, 16);
+        // Make first to 8 buttons are triggers
+        if (i < 8)
+        {
+            _channel[i + 4] = calcRawValue(strIn.substr(button_start + (3 * i), 3), false);
+            //std::cout << strIn.substr(button_start + (3 * i), 3);
+        }
+        // Make 8th to the last are toggles
+        else if (i < numButtons)
+        {
+            std::string inToggle = strIn.substr(button_start + (3 * i), 3);
+            if (inToggle == "FFF" && inToggle != _prev[i - 8])
+            {
+                if (_channel[i + 4] == _ep_max)
+                {
+                    _channel[i + 4] = _ep_min;
+                }
+                else
+                {
+                    _channel[i + 4] = _ep_max;
+                }
+            }
+            _prev[i - 8] = inToggle;
+        }
+        else
+        {
+            // for the rest
+            _channel[i + 4] = _ep_min;
+        }
     }
-
-    // set the values for 12 buttons.
-    _sbusPacket[6] |= (uint8_t)((buttons[0]) << 4);
-    _sbusPacket[7] = (uint8_t)((buttons[0]) >> 4 | (buttons[1]) << 7);
-    _sbusPacket[8] = (uint8_t)((buttons[1]) >> 1);
-    _sbusPacket[9] = (uint8_t)((buttons[1]) >> 9 | (buttons[2]) << 2);
-    _sbusPacket[10] = (uint8_t)((buttons[2]) >> 6 | (buttons[3]) << 5);
-    _sbusPacket[11] = (uint8_t)((buttons[3]) >> 3);
-    _sbusPacket[12] = (uint8_t)((buttons[4]));
-    _sbusPacket[13] = (uint8_t)((buttons[4]) >> 8 | (buttons[5]) << 3);
-    _sbusPacket[14] = (uint8_t)((buttons[5]) >> 5 | (buttons[6]) << 6);
-    _sbusPacket[15] = (uint8_t)((buttons[6]) >> 2);
-    _sbusPacket[16] = (uint8_t)((buttons[6]) >> 10 | (buttons[7]) << 1);
-    _sbusPacket[17] = (uint8_t)((buttons[7]) >> 7 | (buttons[8]) << 4);
-    _sbusPacket[18] = (uint8_t)((buttons[8]) >> 4 | (buttons[9]) << 7);
-    _sbusPacket[19] = (uint8_t)((buttons[9]) >> 1);
-    _sbusPacket[20] = (uint8_t)((buttons[9]) >> 9 | (buttons[10]) << 2);
-    _sbusPacket[21] = (uint8_t)((buttons[10]) >> 6 | (buttons[11]) << 5);
-    _sbusPacket[22] = (uint8_t)((buttons[11]) >> 3);
+    std::cout << "\r" << std::flush;
+    //
+    //build an SBUS packet
+    // Byte[0]: SBUS Header, 0x0F
+    _sbusPacket[0] = 0x0F;
+    // Byte[1-22]: 16 servo channels, 11 bits per servo channel
+    _sbusPacket[1] = (uint8_t)(_channel[0] & 0x7ff);
+    _sbusPacket[2] = (uint8_t)((_channel[0] & 0x7ff) >> 8 | (_channel[1] & 0x7ff) << 3);
+    _sbusPacket[3] = (uint8_t)((_channel[1] & 0x7ff) >> 5 | (_channel[2] & 0x7ff) << 6);
+    _sbusPacket[4] = (uint8_t)((_channel[2] & 0x7ff) >> 2);
+    _sbusPacket[5] = (uint8_t)((_channel[2] & 0x7ff) >> 10 | (_channel[3] & 0x7ff) << 1);
+    _sbusPacket[6] = (uint8_t)((_channel[3] & 0x7ff) >> 7 | (_channel[4] & 0x7ff) << 4);
+    _sbusPacket[7] = (uint8_t)((_channel[4] & 0x7ff) >> 4 | (_channel[5] & 0x7ff) << 7);
+    _sbusPacket[8] = (uint8_t)((_channel[5] & 0x7ff) >> 1);
+    _sbusPacket[9] = (uint8_t)((_channel[5] & 0x7ff) >> 9 | (_channel[6] & 0x7ff) << 2);
+    _sbusPacket[10] = (uint8_t)((_channel[6] & 0x7ff) >> 6 | (_channel[7] & 0x7ff) << 5);
+    _sbusPacket[11] = (uint8_t)((_channel[7] & 0x7ff) >> 3);
+    _sbusPacket[12] = (uint8_t)((_channel[8] & 0x7ff));
+    _sbusPacket[13] = (uint8_t)((_channel[8] & 0x7ff) >> 8 | (_channel[9] & 0x7ff) << 3);
+    _sbusPacket[14] = (uint8_t)((_channel[9] & 0x7ff) >> 5 | (_channel[10] & 0x7ff) << 6);
+    _sbusPacket[15] = (uint8_t)((_channel[10] & 0x7ff) >> 2);
+    _sbusPacket[16] = (uint8_t)((_channel[10] & 0x7ff) >> 10 | (_channel[11] & 0x7ff) << 1);
+    _sbusPacket[17] = (uint8_t)((_channel[11] & 0x7ff) >> 7 | (_channel[12] & 0x7ff) << 4);
+    _sbusPacket[18] = (uint8_t)((_channel[12] & 0x7ff) >> 4 | (_channel[13] & 0x7ff) << 7);
+    _sbusPacket[19] = (uint8_t)((_channel[13] & 0x7ff) >> 1);
+    _sbusPacket[20] = (uint8_t)((_channel[13] & 0x7ff) >> 9 | (_channel[14] & 0x7ff) << 2);
+    _sbusPacket[21] = (uint8_t)((_channel[14] & 0x7ff) >> 6 | (_channel[15] & 0x7ff) << 5);
+    _sbusPacket[22] = (uint8_t)((_channel[15] & 0x7ff) >> 3);
     // Byte[23]:
     // Bit 7: digital channel 17 (0x80)
     // Bit 6: digital channel 18 (0x40)
@@ -174,7 +223,7 @@ int SBUS_CONTROLLER::Sbus_Serial::update()
     ss << "Packet :";
     for (int i = 0; i < 25; i++)
     {
-        ss << std::setfill('0')  << std::right << std::setw(2) << std::hex << (uint)_sbusPacket[i];
+        ss << std::setfill('0') << std::right << std::setw(2) << std::hex << (uint)_sbusPacket[i];
     }
     ss << " - " << _s_sbusPacket;
     ss << "\r";
