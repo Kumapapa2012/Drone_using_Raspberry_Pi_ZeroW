@@ -38,7 +38,7 @@ int SBUS_CONTROLLER::Sbus_Serial::_connect(std::string dev_path)
 {
     if (_fd > 0)
     {
-        std::cerr << "Error : Stop first" << std::endl;
+        std::cerr << "Error : Ruuning...Stop first" << std::endl;
         return -1;
     }
     // Serial Connection Setup
@@ -98,7 +98,7 @@ int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
     std::regex re("all-([0-9A-F]{2}([0-9A-F]{3})+-){2}");
     if (strIn.length() == 0 || !std::regex_match(strIn.c_str(), re))
     {
-        std::cout << "Invalid String! : " << strIn;
+        std::cout << "Invalid Format! : " << strIn;
         return -1;
     }
 
@@ -106,7 +106,7 @@ int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
     // Start Parsing
 
     // take # of axes. must be >4. if >=4 take first 4 else fail.
-    numAxes = std::stoi(strIn.substr(4, 2));
+    numAxes = std::stoi(strIn.substr(4, 2),nullptr,16);
     if (numAxes < 4)
     {
         std::cout << "Too few axes: " << numAxes;
@@ -135,22 +135,23 @@ int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
     int button_start = strIn.find('-', 5) + 1;
 
     // get numbottons. only 12 buttons are supported since using 4 channels already(axes)
-    numButtons = std::max(12, std::stoi(strIn.substr(button_start, 2)));
+    // Total 16 Channels
+    numButtons = std::min(12, std::stoi(strIn.substr(button_start, 2),nullptr,16));
 
     button_start += 2;
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < numButtons; i++)
     {
-        // Make first to 8 buttons are triggers
-        if (i < 8)
+        if (numButtons > 4 && i < numButtons - 4)
         {
             _channel[i + 4] = calcRawValue(strIn.substr(button_start + (3 * i), 3), false);
-            //std::cout << strIn.substr(button_start + (3 * i), 3);
         }
-        // Make 8th to the last are toggles
-        else if (i < numButtons)
+        // Make last 4 buttons are toggle switch.
+        // (There shold be a mapping from gamepad to FC. Will be implemented.)
+        else 
         {
             std::string inToggle = strIn.substr(button_start + (3 * i), 3);
-            if (inToggle == "FFF" && inToggle != _prev[i - 8])
+            std::cout << i - (numButtons - 4);
+            if (inToggle == "FFF" && inToggle != _prev[i - (numButtons - 4)])
             {
                 if (_channel[i + 4] == _ep_max)
                 {
@@ -161,12 +162,7 @@ int SBUS_CONTROLLER::Sbus_Serial::write(std::string strIn)
                     _channel[i + 4] = _ep_max;
                 }
             }
-            _prev[i - 8] = inToggle;
-        }
-        else
-        {
-            // for the rest
-            _channel[i + 4] = _ep_min;
+            _prev[i - (numButtons - 4)] = inToggle;
         }
     }
     std::cout << "\r" << std::flush;
